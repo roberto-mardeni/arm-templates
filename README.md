@@ -1,2 +1,3 @@
-# arm-templates
-Azure Resource Manager Templates
+# devtest-arm-templates
+
+Azure Resource Manager Templates and Artficacts for DevTest Labs
