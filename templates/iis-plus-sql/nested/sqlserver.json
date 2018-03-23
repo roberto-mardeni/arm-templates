@@ -36,10 +36,10 @@
     },
     "variables": {
       "labSubnetName": "[concat(variables('labVirtualNetworkName'), 'Subnet')]",
-      "labVirtualNetworkId": "/subscriptions/15561d27-5df0-4f7b-9cb8-a4a771b9fd71/resourceGroups/DevTestLabRG972615/providers/Microsoft.Network/virtualNetworks/DtlDevTestLab",
+      "labVirtualNetworkId": "[resourceId('Microsoft.DevTestLab/labs/virtualnetworks', parameters('labName'), variables('labVirtualNetworkName'))]",
       "labVirtualNetworkName": "[concat('Dtl', parameters('labName'))]",
       "vmId": "[resourceId ('Microsoft.DevTestLab/labs/virtualmachines', parameters('labName'), parameters('newVMName'))]",
-      "vmName": "[concat(parameters('newVMName'))]"
+      "vmName": "[concat(parameters('labName'), '/', parameters('newVMName'))]"
     },
     "resources": [
       {

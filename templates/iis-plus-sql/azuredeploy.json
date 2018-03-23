@@ -16,6 +16,20 @@
       },
       "defaultValue": "[[[VmPassword]]"
     },
+    "sqlVmName": {
+      "type": "string",
+      "metadata": {
+        "description": "SQL Server Name"
+      },
+      "defaultValue": "vmsql01"
+    },
+    "sqlVmSize": {
+      "type": "string",
+      "metadata": {
+        "description": "SQL Server VM Size"
+      },
+      "defaultValue": "Standard_DS2_v2"
+    },
     "sqlEdition": {
       "type": "string",
       "metadata": {
@@ -29,50 +43,54 @@
     }
   },
   "variables": {
-    "ArtifactsLocation": "https://raw.githubusercontent.com/roberto-mardeni/devtest-arm-templates/master/templates/iis-plus-sql",
-    "ArtifactsLocationSasToken": "",
-    "TemplateFolder": "nested",
-    "SqlServerTemplate": "sqlserver.json",
-    "SqlServerName": "vmsql01",
-    "WebServerTemplate": "webserver.json",
-    "WebServerName": "vmweb01"
+    "labName": "DevTestLab",
+    "labSubnetName": "[concat(variables('labVirtualNetworkName'), 'Subnet')]",
+    "labVirtualNetworkId": "[resourceId('Microsoft.DevTestLab/labs/virtualnetworks', variables('labName'), variables('labVirtualNetworkName'))]",
+    "labVirtualNetworkName": "[concat('Dtl', variables('labName'))]",
+    "sqlServerId": "[resourceId ('Microsoft.DevTestLab/labs/virtualmachines', variables('labName'), parameters('sqlVmName'))]",
+    "sqlServerName": "[concat(variables('labName'), '/', parameters('sqlVmName'))]"
   },
   "resources": [
     {
-      "name": "SqlServer",
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2016-09-01",
+      "apiVersion": "2016-05-15",
+      "type": "Microsoft.DevTestLab/labs/virtualmachines",
+      "name": "[variables('sqlServerName')]",
+      "location": "[resourceGroup().location]",
       "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(variables('ArtifactsLocation'), '/', variables('TemplateFolder'), '/', variables('SqlServerTemplate'), variables('ArtifactsLocationSasToken'))]",
-          "contentVersion": "1.0.0.0"
+        "labVirtualNetworkId": "[variables('labVirtualNetworkId')]",
+        "notes": "Free License: SQL Server 2016 SP1 Developer on Windows Server 2016",
+        "galleryImageReference": {
+          "offer": "SQL2016SP1-WS2016",
+          "publisher": "MicrosoftSQLServer",
+          "sku": "[parameters('sqlEdition')]",
+          "osType": "Windows",
+          "version": "latest"
         },
-        "parameters": {
-          "newVMName": { "value": "[variables('SqlServerName')]" },
-          "userName": { "value": "[parameters('adminUserName')]" },
-          "password": { "value": "[parameters('adminPassword')]" },
-          "sqlEdition": { "value": "[parameters('sqlEdition')]" }
-        }
-      }
-    },
-    {
-      "name": "WebServer",
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2016-09-01",
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(variables('ArtifactsLocation'), '/', variables('TemplateFolder'), '/', variables('WebServerTemplate'), variables('ArtifactsLocationSasToken'))]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "newVMName": { "value": "[variables('WebServerName')]" },
-          "userName": { "value": "[parameters('adminUserName')]" },
-          "password": { "value": "[parameters('adminPassword')]" }
+        "size": "[parameters('sqlVmSize')]",
+        "userName": "[parameters('adminUsername')]",
+        "password": "[parameters('adminPassword')]",
+        "isAuthenticationWithSshKey": false,
+        "labSubnetName": "[variables('labSubnetName')]",
+        "disallowPublicIpAddress": true,
+        "storageType": "Premium",
+        "allowClaim": false,
+        "networkInterface": {
+          "sharedPublicIpAddressConfiguration": {
+            "inboundNatRules": [
+              {
+                "transportProtocol": "Tcp",
+                "backendPort": 3389
+              }
+            ]
+          }
         }
       }
     }
   ],
-  "outputs": {}
+  "outputs": {
+    "sqlVMId": {
+      "type": "string",
+      "value": "[variables('sqlServerId')]"
+    }
+  }
 }
