@@ -75,7 +75,7 @@
           "imageReference": {
             "publisher": "MicrosoftSQLServer",
             "offer": "SQL2016SP1-WS2016",
-            "sku": "Enterprise",
+            "sku": "SQLDEV",
             "version": "latest"
           },
           "osDisk": {
