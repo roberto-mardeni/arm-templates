@@ -28,23 +28,24 @@
     "ArtifactsLocation": "https://raw.githubusercontent.com/roberto-mardeni/devtest-arm-templates/master/templates/2-tier-app-iaas",
     "ArtifactsLocationSasToken": "",
     "TemplateFolder": "nested",
-    "SqlSrvTemplateFileName": "sqlserver.json"
+    "NetworkTemplate": "network.json",
+    "SqlSrvTemplate": "sqlserver.json",
+    "WebSrvTemplate": "webserver.json"
   },
   "resources": [
     {
-      "name": "SqlSrv",
+      "name": "Network",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2016-09-01",
+      "dependsOn": [],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('ArtifactsLocation'), '/', variables('TemplateFolder'), '/', variables('SqlSrvTemplateFileName'), variables('ArtifactsLocationSasToken'))]",
+          "uri": "[concat(parameters('ArtifactsLocation'), '/', variables('TemplateFolder'), '/', variables('NetworkTemplate'), parameters('ArtifactsLocationSasToken'))]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "labName": { "value": "[parameters('labName')]" },
-          "userName": { "value": "[parameters('adminUsername')]" },
-          "password": { "value": "[parameters('adminPassword')]" }
+          "vNetName": { "value": "[concat(parameters('labName'), '-vnet')]" }
         }
       }
     }
