@@ -22,8 +22,11 @@
     "ArtifactsLocationSasToken": "",
     "TemplateFolder": "nested",
     "NetworkTemplate": "network.json",
-    "SqlSrvTemplate": "sqlserver.json",
-    "WebSrvTemplate": "webserver.json"
+    "NetworkName": "[concat(resourceGroup().name, '-vnet')]",
+    "SqlServerTemplate": "sqlserver.json",
+    "SqlServerName": "[concat(resourceGroup().name, '-sql')]",
+    "WebServerTemplate": "webserver.json",
+    "WebServerName": "[concat(resourceGroup().name, '-web')]"
   },
   "resources": [
     {
@@ -38,7 +41,29 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "vNetName": { "value": "[concat(resourceGroup().name, '-vnet')]" }
+          "vNetName": { "value": "[variables('NetworkName')]" }
+        }
+      }
+    },
+    {
+      "name": "SqlServer",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2016-09-01",
+      "dependsOn": [ "vNetDeploy" ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('ArtifactsLocation'), '/', variables('TemplateFolder'), '/', variables('SqlServerTemplate'), variables('ArtifactsLocationSasToken'))]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "virtualMachineName": { "value": "[variables('SqlServerName')]" },
+          "adminUsername": { "value": "[parameters('AdminUserName')]" },
+          "virtualNetworkName": { "value": "[variables('NetworkName')]" },
+          "virtualNetworkResourceGroup": { "value": "[resourceGroup().name]" },
+          "adminPassword": { "value": "[parameters('AdminPassword')]" },
+          "ArtifactsLocation": { "value": "[variables('ArtifactsLocation')]" },
+          "ArtifactsLocationSasToken": { "value": "[variables('ArtifactsLocationSasToken')]" }
         }
       }
     }
