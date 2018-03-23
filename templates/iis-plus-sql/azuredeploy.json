@@ -29,7 +29,7 @@
     }
   },
   "variables": {
-    "ArtifactsLocation": "[deployment().properties.templateLink.uri]",
+    "ArtifactsLocation": "https://raw.githubusercontent.com/roberto-mardeni/devtest-arm-templates/master/templates/iis-plus-sql",
     "ArtifactsLocationSasToken": "",
     "TemplateFolder": "nested",
     "SqlServerTemplate": "sqlserver.json",
