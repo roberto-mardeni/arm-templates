@@ -15,6 +15,13 @@
         "description": "Admin password"
       },
       "defaultValue": "[[[VmPassword]]"
+    },
+    "SqlEdition": {
+      "type": "string",
+      "metadata": {
+        "description": "SQL Server Edition"
+      },
+      "defaultValue": "SQLDEV"
     }
   },
   "variables": {
@@ -63,7 +70,8 @@
           "virtualNetworkResourceGroup": { "value": "[resourceGroup().name]" },
           "adminPassword": { "value": "[parameters('AdminPassword')]" },
           "ArtifactsLocation": { "value": "[variables('ArtifactsLocation')]" },
-          "ArtifactsLocationSasToken": { "value": "[variables('ArtifactsLocationSasToken')]" }
+          "ArtifactsLocationSasToken": { "value": "[variables('ArtifactsLocationSasToken')]" },
+          "SqlEdition": { "value": "[parameters('SqlEdition')]" }
         }
       }
     }

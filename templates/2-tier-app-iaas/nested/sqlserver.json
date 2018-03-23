@@ -36,6 +36,17 @@
       "metadata": {
         "description": "Auto-generated token to access ArtifactsLocation"
       }
+    },
+    "SqlEdition": {
+      "type": "string",
+      "metadata": {
+        "description": "SQL Server Edition"
+      },
+      "defaultValue": "SQLDEV",
+      "allowedValues": [
+        "SQLDEV",
+        "Enteprise"
+      ]
     }
   },
   "variables": {
@@ -45,9 +56,9 @@
     "networkSecurityGroupName": "[concat(parameters('virtualMachineName'), 'NSG')]",
     "publicIpAddressName": "[concat(parameters('virtualMachineName'),'PubIp')]",
     "virtualMachineSize": "Standard_DS12_v2",
-    "SqlSrvDscConfigArchiveFolder": "DSC",
+    "SqlSrvDscConfigArchiveFolder": "scripts",
     "SqlSrvDscConfigArchiveFileName": "SqlSrvDscConfig.zip",
-    "InstallxSQLServerModuleScriptFolder": "CustomScripts",
+    "InstallxSQLServerModuleScriptFolder": "scripts",
     "InstallxSQLServerModuleScriptFileName": "InstallxSQLServerModule.ps1"
   },
   "resources": [
@@ -75,7 +86,7 @@
           "imageReference": {
             "publisher": "MicrosoftSQLServer",
             "offer": "SQL2016SP1-WS2016",
-            "sku": "SQLDEV",
+            "sku": "[parameters('SqlEdition')]",
             "version": "latest"
           },
           "osDisk": {
