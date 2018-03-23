@@ -21,7 +21,11 @@
       "metadata": {
         "description": "SQL Server Edition"
       },
-      "defaultValue": "SQLDEV"
+      "defaultValue": "SQLDEV",
+      "allowedValues": [
+        "SQLDEV",
+        "Enteprise"
+      ]
     }
   },
   "variables": {
