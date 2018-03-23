@@ -25,7 +25,7 @@
     }
   },
   "variables": {
-    "ArtifactsLocation": "https://raw.githubusercontent.com/roberto-mardeni/devtest-arm-templates/master/templates",
+    "ArtifactsLocation": "https://raw.githubusercontent.com/roberto-mardeni/devtest-arm-templates/master/templates/2-tier-app-iaas",
     "ArtifactsLocationSasToken": "",
     "TemplateFolder": "nested",
     "SqlSrvTemplateFileName": "sqlserver.json"
