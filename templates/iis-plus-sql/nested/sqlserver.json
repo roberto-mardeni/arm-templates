@@ -21,6 +21,17 @@
       "password": {
         "type": "securestring",
         "defaultValue": "[[[VmPassword]]"
+      },
+      "sqlEdition": {
+        "type": "string",
+        "metadata": {
+          "description": "SQL Server Edition"
+        },
+        "defaultValue": "SQLDEV",
+        "allowedValues": [
+          "SQLDEV",
+          "Enteprise"
+        ]
       }
     },
     "variables": {
@@ -42,7 +53,7 @@
           "galleryImageReference": {
             "offer": "SQL2016SP1-WS2016",
             "publisher": "MicrosoftSQLServer",
-            "sku": "SQLDEV",
+            "sku": "[parameters('sqlEdition')]",
             "osType": "Windows",
             "version": "latest"
           },
