@@ -24,9 +24,9 @@
     "NetworkTemplate": "network.json",
     "NetworkName": "[concat(resourceGroup().name, '-vnet')]",
     "SqlServerTemplate": "sqlserver.json",
-    "SqlServerName": "[concat(resourceGroup().name, '-sql')]",
+    "SqlServerName": "vmsql01",
     "WebServerTemplate": "webserver.json",
-    "WebServerName": "[concat(resourceGroup().name, '-web')]"
+    "WebServerName": "vmweb01"
   },
   "resources": [
     {
