@@ -44,9 +44,9 @@
   },
   "variables": {
     "labName": "DevTestLab",
-    "labSubnetName": "[concat(variables('labVirtualNetworkName'), 'Subnet')]",
-    "labVirtualNetworkId": "[resourceId('Microsoft.DevTestLab/labs/virtualnetworks', variables('labName'), variables('labVirtualNetworkName'))]",
     "labVirtualNetworkName": "[concat('Dtl', variables('labName'))]",
+    "labSubnetName": "[concat(variables('labVirtualNetworkName'), 'Subnet')]",
+    "labVirtualNetworkId": "[concat('/subscriptions/15561d27-5df0-4f7b-9cb8-a4a771b9fd71/resourceGroups/DevTestLabRG972615/providers/Microsoft.Network/virtualNetworks/', variables('labVirtualNetworkName'))]",
     "sqlServerId": "[resourceId ('Microsoft.DevTestLab/labs/virtualmachines', variables('labName'), parameters('sqlVmName'))]",
     "sqlServerName": "[concat(variables('labName'), '/', parameters('sqlVmName'))]"
   },
