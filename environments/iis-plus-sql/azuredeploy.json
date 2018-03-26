@@ -50,7 +50,8 @@
     "SqlSrvSize": "Standard_DS12_v2",
     "SqlSrvStorageType": "Standard_LRS",
     "SqlSrvPubIpDnsName": "[toLower(concat(parameters('SqlSrvName'),uniqueString(resourceGroup().id)))]",
-    "SqlSrvDscConfigArchiveFileName": "SqlSrvDscConfig.zip"
+    "SqlSrvDscConfigArchiveFileName": "SqlSrvDscConfig.zip",
+    "InstallxSQLServerModuleScriptFileName": "InstallxSQLServerModule.ps1"
   },
   "resources": [
     {
@@ -329,12 +330,37 @@
       },
       "resources": [
         {
-          "name": "Microsoft.Powershell.DSC",
+          "name": "InstallxSQLServerModule",
           "type": "extensions",
           "location": "[resourceGroup().location]",
           "apiVersion": "2016-04-30-preview",
           "dependsOn": [
             "[resourceId('Microsoft.Compute/virtualMachines', parameters('SqlSrvName'))]"
+          ],
+          "tags": {
+            "displayName": "InstallxSQLServerModule"
+          },
+          "properties": {
+            "publisher": "Microsoft.Compute",
+            "type": "CustomScriptExtension",
+            "typeHandlerVersion": "1.9",
+            "autoUpgradeMinorVersion": true,
+            "settings": {
+              "fileUris": [
+                "[concat(variables('ArtifactsLocation'), '/', variables('ScriptsFolder'), '/', variables('InstallxSQLServerModuleScriptFileName'), variables('ArtifactsLocationSasToken'))]"
+              ],
+              "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File ', variables('InstallxSQLServerModuleScriptFileName'))]"
+            }
+          }
+        },
+        {
+          "name": "Microsoft.Powershell.DSC",
+          "type": "extensions",
+          "location": "[resourceGroup().location]",
+          "apiVersion": "2016-04-30-preview",
+          "dependsOn": [
+            "[resourceId('Microsoft.Compute/virtualMachines', parameters('SqlSrvName'))]",
+            "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('SqlSrvName'), 'InstallxSQLServerModule')]"
           ],
           "tags": {
             "displayName": "SqlSrvDscConfig"
