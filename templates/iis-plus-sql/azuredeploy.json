@@ -4,7 +4,7 @@
   "parameters": {
     "newVMName": {
       "type": "string",
-      "defaultValue": "vmsql02"
+      "defaultValue": "vmsql01"
     },
     "labName": {
       "type": "string",

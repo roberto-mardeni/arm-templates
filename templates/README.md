@@ -1,3 +1,3 @@
-# Templates
+# DevTest Labs Templates
 
-The templates in this directory can be used for creating environments in DevTet Labs.
+The ARM templates in this directory can be used for creating individual VMs in DevTet Labs.
