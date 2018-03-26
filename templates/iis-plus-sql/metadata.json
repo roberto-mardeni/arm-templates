@@ -1,4 +1,0 @@
-﻿{
-  "itemDisplayName": "IIS + SQL",
-  "description": "Contains a Windows 2016 VM with SQL Server 2016 + Windows 2016 VM with IIS using the DevTest Lab virtual network"
-}
