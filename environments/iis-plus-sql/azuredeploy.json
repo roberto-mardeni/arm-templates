@@ -359,30 +359,6 @@
               "configurationUrlSasToken": "[variables('ArtifactsLocationSasToken')]"
             }
           }
-        },
-        {
-          "name": "InstallxSQLServerModule",
-          "type": "extensions",
-          "location": "[resourceGroup().location]",
-          "apiVersion": "2016-04-30-preview",
-          "dependsOn": [
-            "[resourceId('Microsoft.Compute/virtualMachines', parameters('SqlSrvName'))]"
-          ],
-          "tags": {
-            "displayName": "InstallxSQLServerModule"
-          },
-          "properties": {
-            "publisher": "Microsoft.Compute",
-            "type": "CustomScriptExtension",
-            "typeHandlerVersion": "1.9",
-            "autoUpgradeMinorVersion": true,
-            "settings": {
-              "fileUris": [
-                "[concat(variables('ArtifactsLocation'), '/', variables('ScriptsFolder'), '/', variables('InstallxSQLServerModuleScriptFileName'), variables('ArtifactsLocationSasToken'))]"
-              ],
-              "commandToExecute": "[variables('powerShellExecuteCommand')]"
-            }
-          }
         }
       ]
     }
