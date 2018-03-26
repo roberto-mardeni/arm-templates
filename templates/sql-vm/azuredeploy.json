@@ -5,28 +5,28 @@
     "labName": {
       "type": "string",
       "metadata": {
-          "description": "DevTest Lab name, for networking"
+        "description": "DevTest Lab name, for networking"
       },
       "defaultValue": "DevTestLab"
     },
     "newVMName": {
       "type": "string",
       "metadata": {
-          "description": "Virtual machine name"
+        "description": "Virtual machine name"
       },
       "defaultValue": "vmsql01"
     },
     "size": {
       "type": "string",
       "metadata": {
-          "description": "Virtual machine size"
+        "description": "Virtual machine size"
       },
       "defaultValue": "Standard_DS2_v2"
     },
     "sqlEdition": {
       "type": "string",
       "metadata": {
-          "description": "Virtual machine name"
+        "description": "Virtual machine name"
       },
       "allowedValues": [
         "SQLDEV",
@@ -37,14 +37,14 @@
     "userName": {
       "type": "string",
       "metadata": {
-          "description": "Administrator username"
+        "description": "Administrator username"
       },
       "defaultValue": "sysadmin"
     },
     "password": {
       "type": "securestring",
       "metadata": {
-          "description": "Administrator password"
+        "description": "Administrator password"
       },
       "defaultValue": "[[[VmPassword]]"
     }
@@ -56,43 +56,39 @@
     "vmId": "[resourceId('Microsoft.DevTestLab/labs/virtualmachines', parameters('labName'), parameters('newVMName'))]",
     "vmName": "[concat(parameters('labName'), '/', parameters('newVMName'))]"
   },
-  "resources": [
-    {
-      "apiVersion": "2016-05-15",
-      "type": "Microsoft.DevTestLab/labs/virtualmachines",
-      "name": "[variables('vmName')]",
-      "location": "[resourceGroup().location]",
-      "properties": {
-        "labVirtualNetworkId": "[variables('labVirtualNetworkId')]",
-        "notes": "Free License: SQL Server 2016 SP1 Developer on Windows Server 2016",
-        "galleryImageReference": {
-          "offer": "SQL2016SP1-WS2016",
-          "publisher": "MicrosoftSQLServer",
-          "sku": "[parameters('sqlEdition')]",
-          "osType": "Windows",
-          "version": "latest"
-        },
-        "size": "[parameters('size')]",
-        "userName": "[parameters('userName')]",
-        "password": "[parameters('password')]",
-        "isAuthenticationWithSshKey": false,
-        "labSubnetName": "[variables('labSubnetName')]",
-        "disallowPublicIpAddress": true,
-        "storageType": "Premium",
-        "allowClaim": false,
-        "networkInterface": {
-          "sharedPublicIpAddressConfiguration": {
-            "inboundNatRules": [
-              {
-                "transportProtocol": "Tcp",
-                "backendPort": 3389
-              }
-            ]
-          }
+  "resources": [{
+    "apiVersion": "2016-05-15",
+    "type": "Microsoft.DevTestLab/labs/virtualmachines",
+    "name": "[variables('vmName')]",
+    "location": "[resourceGroup().location]",
+    "properties": {
+      "labVirtualNetworkId": "[variables('labVirtualNetworkId')]",
+      "notes": "Free License: SQL Server 2016 SP1 Developer on Windows Server 2016",
+      "galleryImageReference": {
+        "offer": "SQL2016SP1-WS2016",
+        "publisher": "MicrosoftSQLServer",
+        "sku": "[parameters('sqlEdition')]",
+        "osType": "Windows",
+        "version": "latest"
+      },
+      "size": "[parameters('size')]",
+      "userName": "[parameters('userName')]",
+      "password": "[parameters('password')]",
+      "isAuthenticationWithSshKey": false,
+      "labSubnetName": "[variables('labSubnetName')]",
+      "disallowPublicIpAddress": true,
+      "storageType": "Premium",
+      "allowClaim": false,
+      "networkInterface": {
+        "sharedPublicIpAddressConfiguration": {
+          "inboundNatRules": [{
+            "transportProtocol": "Tcp",
+            "backendPort": 3389
+          }]
         }
       }
     }
-  ],
+  }],
   "outputs": {
     "labVMId": {
       "type": "string",
