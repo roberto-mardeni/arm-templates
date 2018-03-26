@@ -32,7 +32,7 @@
   },
   "resources": [
     {
-      "apiVersion": "2017-04-26-preview",
+      "apiVersion": "2016-05-15",
       "type": "Microsoft.DevTestLab/labs/virtualmachines",
       "name": "[variables('vmName')]",
       "location": "[resourceGroup().location]",
@@ -58,7 +58,7 @@
           "sharedPublicIpAddressConfiguration": {
             "inboundNatRules": [
               {
-                "transportProtocol": "tcp",
+                "transportProtocol": "Tcp",
                 "backendPort": 3389
               }
             ]
