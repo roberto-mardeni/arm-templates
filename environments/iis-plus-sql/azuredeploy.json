@@ -334,8 +334,7 @@
           "location": "[resourceGroup().location]",
           "apiVersion": "2016-04-30-preview",
           "dependsOn": [
-            "[resourceId('Microsoft.Compute/virtualMachines', parameters('SqlSrvName'))]",
-            "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('SqlSrvName'), 'InstallxSQLServerModule')]"
+            "[resourceId('Microsoft.Compute/virtualMachines', parameters('SqlSrvName'))]"
           ],
           "tags": {
             "displayName": "SqlSrvDscConfig"
