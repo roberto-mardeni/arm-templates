@@ -30,6 +30,8 @@
     "vNetPrefix": "10.0.0.0/16",
     "vNetSubnet1Name": "Subnet-1",
     "vNetSubnet1Prefix": "10.0.0.0/24",
+    "ArtifactsLocation": "[uri(deployment().properties.templateLink.uri, '.')]",
+    "ArtifactsLocationSasToken": "",
     "WebSrvImagePublisher": "MicrosoftWindowsServer",
     "WebSrvImageOffer": "WindowsServer",
     "WebSrvVmSize": "Standard_D2_v2",
@@ -39,7 +41,9 @@
     "WebSrvNicName": "[concat(parameters('WebSrvName'), 'NetworkInterface')]",
     "virtualNetworkLocation": "[resourceGroup().location]",
     "WebSrvPubIpName": "[concat(parameters('WebSrvName'),'PubIp')]",
-    "WebSrvPubIpDnsName": "[toLower(concat(parameters('WebSrvName'),uniqueString(resourceGroup().id)))]"
+    "WebSrvPubIpDnsName": "[toLower(concat(parameters('WebSrvName'),uniqueString(resourceGroup().id)))]",
+    "WebSrvDscConfigArchiveFolder": "scripts",
+    "WebSrvDscConfigArchiveFileName": "WebSrvDscConfig.zip"
   },
   "resources": [
     {
@@ -85,6 +89,7 @@
       "location": "[variables('virtualNetworkLocation')]",
       "apiVersion": "2016-03-30",
       "dependsOn": [
+        "[variables('vNetName')]",
         "[resourceId('Microsoft.Network/publicIPAddresses', variables('WebSrvPubIpName'))]" ],
       "tags": {
         "displayName": "WebSrvNic"
@@ -148,7 +153,39 @@
           ]
         }
       },
-      "resources": []
+      "resources": [
+        {
+          "name": "Microsoft.Powershell.DSC",
+          "type": "extensions",
+          "location": "[resourceGroup().location]",
+          "apiVersion": "2016-04-30-preview",
+          "dependsOn": [
+            "[resourceId('Microsoft.Compute/virtualMachines', parameters('WebSrvName'))]"
+          ],
+          "tags": {
+            "displayName": "WebSrvDscConfig"
+          },
+          "properties": {
+            "publisher": "Microsoft.Powershell",
+            "type": "DSC",
+            "typeHandlerVersion": "2.9",
+            "autoUpgradeMinorVersion": true,
+            "settings": {
+              "configuration": {
+                "url": "[concat(variables('ArtifactsLocation'), '/', variables('WebSrvDscConfigArchiveFolder'), '/', variables('WebSrvDscConfigArchiveFileName'))]",
+                "script": "WebSrvDscConfig.ps1",
+                "function": "Main"
+              },
+              "configurationArguments": {
+                "nodeName": "[parameters('WebSrvName')]"
+              }
+            },
+            "protectedSettings": {
+              "configurationUrlSasToken": "[variables('ArtifactsLocationSasToken')]"
+            }
+          }
+        }
+      ]
     }
   ],
   "outputs": {
