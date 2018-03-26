@@ -30,7 +30,7 @@
     "vNetPrefix": "10.0.0.0/16",
     "vNetSubnet1Name": "Subnet-1",
     "vNetSubnet1Prefix": "10.0.0.0/24",
-    "ArtifactsLocation": "[uri(deployment().properties.templateLink.uri, '.')]",
+    "ArtifactsLocation": "https://raw.githubusercontent.com/roberto-mardeni/devtest-arm-templates/master/environments/iis-plus-sql",
     "ArtifactsLocationSasToken": "",
     "WebSrvImagePublisher": "MicrosoftWindowsServer",
     "WebSrvImageOffer": "WindowsServer",
