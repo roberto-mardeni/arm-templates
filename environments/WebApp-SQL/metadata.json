@@ -1,6 +1,6 @@
 {
-  "itemDisplayName": "Web App with Azure SQL Database",
+  "itemDisplayName": "PAAS: Web App + SQL",
   "description": "This template creates an Azure Web App with Azure SQL Database.",
   "githubUsername": "roberto-mardeni",
-  "summary": "Deploys an Azure Web App with aan Azure SQL database as an environment in a DevTest Lab."
+  "summary": "Deploys an Azure Web App with an Azure SQL database as an environment in a DevTest Lab."
 }
