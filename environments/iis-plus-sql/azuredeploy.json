@@ -218,7 +218,7 @@
       },
       "resources": [
         {
-          "name": "InstallxSQLServerModule",
+          "name": "WebSrvSetup",
           "type": "extensions",
           "location": "[resourceGroup().location]",
           "apiVersion": "2016-04-30-preview",
@@ -226,7 +226,7 @@
             "[resourceId('Microsoft.Compute/virtualMachines', parameters('WebSrvName'))]"
           ],
           "tags": {
-            "displayName": "InstallxSQLServerModule"
+            "displayName": "WebSrvSetup"
           },
           "properties": {
             "publisher": "Microsoft.Compute",
