@@ -45,13 +45,18 @@
     "WebSrvPubIpName": "[concat(parameters('WebSrvName'),'PubIp')]",
     "WebSrvPubIpDnsName": "[toLower(concat(parameters('WebSrvName'),uniqueString(resourceGroup().id)))]",
     "WebSrvDscConfigArchiveFileName": "WebSrvDscConfig.zip",
+    "WebSrvSetupScriptFileName": "WebSrvSetup.ps1",
+    "WebSrvHostName": "[concat(variables('WebSrvPubIpDnsName'), '.', resourceGroup().location, '.cloudapp.azure.com')]",
     "SqlSrvNicName": "[concat(parameters('SqlSrvName'), 'NetworkInterface')]",
     "SqlSrvPubIpName": "[concat(parameters('SqlSrvName'),'PubIp')]",
     "SqlSrvSize": "Standard_DS12_v2",
     "SqlSrvStorageType": "Standard_LRS",
     "SqlSrvPubIpDnsName": "[toLower(concat(parameters('SqlSrvName'),uniqueString(resourceGroup().id)))]",
     "SqlSrvDscConfigArchiveFileName": "SqlSrvDscConfig.zip",
-    "InstallxSQLServerModuleScriptFileName": "InstallxSQLServerModule.ps1"
+    "SqlSrvSetupScriptFileName": "SqlSrvSetup.ps1",
+    "SqlSrvHostName": "[concat(variables('SqlSrvPubIpDnsName'), '.', resourceGroup().location, '.cloudapp.azure.com')]",
+    "CertToolFileName": "makecert.exe",
+    "WinRmScriptFileName": "config-winrm.ps1"
   },
   "resources": [
     {
@@ -211,7 +216,34 @@
           }]
         }
       },
-      "resources": [{
+      "resources": [
+        {
+          "name": "InstallxSQLServerModule",
+          "type": "extensions",
+          "location": "[resourceGroup().location]",
+          "apiVersion": "2016-04-30-preview",
+          "dependsOn": [
+            "[resourceId('Microsoft.Compute/virtualMachines', parameters('WebSrvName'))]"
+          ],
+          "tags": {
+            "displayName": "InstallxSQLServerModule"
+          },
+          "properties": {
+            "publisher": "Microsoft.Compute",
+            "type": "CustomScriptExtension",
+            "typeHandlerVersion": "1.9",
+            "autoUpgradeMinorVersion": true,
+            "settings": {
+              "fileUris": [
+                "[concat(variables('ArtifactsLocation'), '/', variables('ScriptsFolder'), '/', variables('WebSrvSetupScriptFileName'), variables('ArtifactsLocationSasToken'))]",
+                "[concat(variables('ArtifactsLocation'), '/', variables('ScriptsFolder'), '/', variables('WinRmScriptFileName'), variables('ArtifactsLocationSasToken'))]",
+                "[concat(variables('ArtifactsLocation'), '/', variables('ScriptsFolder'), '/', variables('CertToolFileName'), variables('ArtifactsLocationSasToken'))]"
+              ],
+              "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File ', variables('WebSrvSetupScriptFileName'), ' -HostName ', variables('WebSrvHostName'))]"
+            }
+          }
+        },
+        {
         "name": "Microsoft.Powershell.DSC",
         "type": "extensions",
         "location": "[resourceGroup().location]",
@@ -347,9 +379,11 @@
             "autoUpgradeMinorVersion": true,
             "settings": {
               "fileUris": [
-                "[concat(variables('ArtifactsLocation'), '/', variables('ScriptsFolder'), '/', variables('InstallxSQLServerModuleScriptFileName'), variables('ArtifactsLocationSasToken'))]"
+                "[concat(variables('ArtifactsLocation'), '/', variables('ScriptsFolder'), '/', variables('SqlSrvSetupScriptFileName'), variables('ArtifactsLocationSasToken'))]",
+                "[concat(variables('ArtifactsLocation'), '/', variables('ScriptsFolder'), '/', variables('WinRmScriptFileName'), variables('ArtifactsLocationSasToken'))]",
+                "[concat(variables('ArtifactsLocation'), '/', variables('ScriptsFolder'), '/', variables('CertToolFileName'), variables('ArtifactsLocationSasToken'))]"
               ],
-              "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File ', variables('InstallxSQLServerModuleScriptFileName'))]"
+              "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File ', variables('SqlSrvSetupScriptFileName'), ' -HostName ', variables('SqlSrvHostName'))]"
             }
           }
         },
